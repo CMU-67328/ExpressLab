@@ -168,5 +168,9 @@ putUser = function(request, response) {
 1. In the putUser function, store the information about Wilma in a JavaScript object variable (global to the user.js file, not within getUser).
 2. Change the getUser function so that it will retrieve and return the information for the user stored in the variable.
 (Putting this nascent model in the controller is bad *separation of concerns*, but we will deal with that later.)
+3. Test your app by doing a PUT to `/user/Wilma/lastname/Flintstone` then a GET to `/user/Wilma/lastname/`.  Your GET should include that Wilma's lastname is Flintstone.
 
+## Step 10 - Demonstrate to a TA 
+
+Demonstrate your working app to a TA **only during office hours**  by the end of Friday.
 
