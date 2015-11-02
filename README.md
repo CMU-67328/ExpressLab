@@ -7,7 +7,7 @@
     - Run `npm init`
     - Use defaults except for entry point type `app.js`
 3. View the package.json that is created in the current directory
-    - I.e. with cat, vim, or in another editor
+    - I.e. with sublime, cat, vim, or in another editor
 4. Run `npm install express --save`
     - This will download Express
     - *--save* will add the dependency to package.json
@@ -15,7 +15,7 @@
     - View the package.json file and see the added Express dependency.  
 5. Create and edit a new file `app.js` and insert the following code:
 
-```
+```JavaScript
 var express = require("express");
 var app = express();
 /*
@@ -38,7 +38,7 @@ It would be useful to have some logging messages to show what URLs that are visi
 
 Middleware is a function that handles requests and is part of the controller function of MVC.  Middleware is used for many purposes; most basically it is used to take the request and call the right route-handling functions that will perform the rest of the controller role.  The app.get in Step 1 is serving that role.  Middleware can also be used to do authentication, authorization, manage cookies and sessions, and many more functions.  
 
-Sencha Labs provides a [list of middleware modules that work well with Express](https://github.com/senchalabs/connect?_ga=1.75415314.1436979566.1385393094#middleware).  You can use several middleware modules, each doing its own processing of the request.  For example, you can use body-parser to process the body of post and put requests, and express-sessions to manage sessions.  This is known as *stacking* middleware.
+Here is a [list of middleware modules that work well with Express](http://expressjs.com/resources/middleware.html).  You can use several middleware modules, each doing its own processing of the request.  For example, you can use body-parser to process the body of post and put requests, and express-sessions to manage sessions.  This is known as *stacking* middleware.
 
 For now, we are going to add the logging module, Morgan, to our middleware stack.  The stack is processed in order, so we should put Morgan *before* the app.get that processes the request.
 
@@ -52,7 +52,7 @@ For now, we are going to add the logging module, Morgan, to our middleware stack
 ## Step 3 - Add an additional GET path
 Express' route pattern matching makes implementing routes very easy. For example, add the following path to your app:
 
-```
+```JavaScript
 app.get("/bye", function (request, response) {
   response.end("Toodles!");
   });
@@ -64,20 +64,20 @@ Re-run your node app and browse to the /bye and /hi paths.
 
 ## Step 4 - Nodemon
 
-It can be a nuisance to have to quit and restart node each time you edit your app.  Nodemon is an npm package that will monitor your files and restart node automagically whenever you save a change.
+It can be a nuisance to have to quit and restart node each time you edit your app.js file.  Nodemon is an npm package that will monitor your files and restart node automagically whenever you save a change.
 
 Nodemon is not a module, but a program.  But it is available via npm.  To install it from the terminal prompt, run: `npm install -g nodemon`.  The -g means to install it *globally* and not in this particular directory.  You might have to run this as administrator or sudo depending on the permissions on your laptop.
 
 Once you have it installed, instead of running your app directly with node, run it with `nodemon app`.  
 
-Give it a try by editing your app file and seeing node being restarted upon save.
+Give it a try by editing your app.js file, changing it, and seeing node being restarted upon save.
 
 ## Step 5 - Other HTTP Methods (PUT, POST, DELETE)
 
 As you might have inferred, app.get is middleware for GET requests.  Similarly app.put will match PUT requests, and there are similar functions for POST and DELETE.
 
 1. Add a new route to handle PUT requests to the /hi route:
-```
+```JavaScript
 app.put("/hi", function (request, response) {
   response.end("Hi route from PUT request");
   });
@@ -117,7 +117,7 @@ To route this set of paths in Express, we can use the pattern `/user/:username/:
 
 Add a route to handle the /user path to your app:
 
-```
+```JavaScript
 app.get("/user/:username/:userinfo", function (request, response) {
   response.end("The user is "+request.params.username+" and the requested info is "+request.params.userinfo);
   });
@@ -127,38 +127,46 @@ Test the new path.
 
 ## Step 7 - Route modules
 
-Of course we will want to do more in our app than just return simple strings.  Therefore we typically put the rest of the MVC controller logic into separate modules.  Lets expand what we can do with the /user path.
+Of course we will want to do more in our app than just return simple strings.  Therefore to maintain a good *separation of concerns* we can put the MVC controller logic into separate modules.  Lets expand what we can do with the /user path.
 
 1. Create a new local module to handle the user route.  For good separation of concerns and organization, lets put it in a new directory called `routes`.  Therefore create a new file called `routes/user.js`.
 2. In user.js, put the code:
-```
-exports.getUser = function(request, response) {
+```JavaScript
+/*
+ * Export an init method that will define a set of routes
+ * handled by this file.
+ * @param app - The Express app
+ */
+exports.init = function(app) {
+  app.get("/user/:username/:userinfo", getUser);
+  }
+
+// Handle the getUser route
+getUser = function(request, response) {
   response.end("The user is "+request.params.username+" and the requested info is "+request.params.userinfo);
   }
 ```
-3. Change the route for /user in app.js to be:
+3. Delete the route for /user in app.js and instead let the route module define it:
+```JavaScript
+require('./routes/user.js').init(app);
 ```
-app.get("/user/:username/:userinfo", userRoutes.getUser);
-```
-4. And add the require at the top of app.js:
-```
-var userRoutes = require('./routes/user.js');
-```
-5. Test the updated route.  It should return the same response as before.
+
+4. Test the updated route.  It should return the same response as before.
 
 ## Step 8 - Add another route to the route module
 
-1. Add a new PUT route for /user that will call a second function in the user.js module:
-```
-exports.putUser = function(request, response) {
+1. Add a new PUT route for /user in the user.js init() function that will call a new function in the user.js module:
+```JavaScript
+putUser = function(request, response) {
   response.end("Adding the user "+request.params.username+" and info "+request.params.userinfo+" with value "+request.params.uservalue);
   }
 ```
-2. Visit your app with the path `/user/WilmaF/lastname/Flintstone` using the Chrome REST Console.
+2. Visit your app with the path `/user/Wilma/lastname/Flintstone` using the Chrome REST Console.
 
 ## Step 9 - The beginning of a model
 
-1. In the putUser function, store the information about WimaF in a JavaScript object variable (global to the user.js file, not within get User).
+1. In the putUser function, store the information about Wilma in a JavaScript object variable (global to the user.js file, not within getUser).
 2. Change the getUser function so that it will retrieve and return the information for the user stored in the variable.
+(Putting this nascent model in the controller is bad *separation of concerns*, but we will deal with that later.)
 
 
