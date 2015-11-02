@@ -1,12 +1,4 @@
-# ExpressLab
 #Express Lab
-
-## Step 0 - Make this file easier to read
-This file is written in [markdown](http://daringfireball.net/projects/markdown/).  You can read it in a text editor, but to see the formatting more clearly, try:
-
-* The [Markdown Preview Plus ](https://chrome.google.com/webstore/detail/markdown-preview-plus/febilkbfcbhebfnokafefeacimjdckgl?hl=en-US) Chrome extension
-    * Make sure to follow the directions to allow access to file URLs
-* Copy this file's contents and paste them into the online markdown editor/previewer at [Markable](http://markable.in/editor/)
 
 ## Step 1 - Hello World
 
