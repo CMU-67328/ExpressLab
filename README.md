@@ -11,7 +11,7 @@
 4. Run `npm install express --save`
     - This will download Express
     - *--save* will add the dependency to package.json
-    - Look at the contents of the current directory, there is now a *node_modules* folder
+    - Look at the contents of the current directory, there is now a *node_modules* directory
     - View the package.json file and see the added Express dependency.  
 5. Create and edit a new file `app.js` and insert the following code:
 
@@ -44,8 +44,8 @@ For now, we are going to add the logging module, Morgan, to our middleware stack
 
 1. Run `npm install morgan --save` to install Morgan and include it in package.json
 2. View the package.json to see the added Morgan dependency
-3. Go to [Morgan package at npmjs.org and scroll down to the Express/Connect examples](https://www.npmjs.org/package/morgan#examples)
-4. Using their example, integrate Morgan into your app.js
+3. Go to [Morgan package at npmjs.org and scroll down to the Express/Connect examples](https://www.npmjs.com/package/morgan#express-connect)
+4. Using their example, integrate Morgan into your app.js 
 5. Run your node app and visit it with a few different paths, including /hi.
 6. Back at the Morgan npm documentation, scroll up to the [Predefined Formats](https://www.npmjs.org/package/morgan#predefined-formats) section and review the options available for formatting the logging messages.  Experiment with a couple options.  For example, I personally like the *tiny*  format.
 
@@ -173,4 +173,25 @@ putUser = function(request, response) {
 ## Step 10 - Demonstrate to a TA 
 
 Demonstrate your working app to a TA **only during office hours**  by the end of Friday.
+
+---
+
+## Optional (but useful) additional steps
+
+---
+
+## Step 11 - Serving static files (html, css, js, etc.)
+
+Web applications typically have static files that are required on the client (browser) side.  These static files include html, css, javascript, jpg, and others that are rendered, interpreted, or displayed by the client.  In HW9 you wrote code to serve these static files by explicitly reading a file from disk and writing it back across the network to the client.  Thankfully Express.js provides middleware to do this more robustly and easily:  `express.static(root, [options])` (See the [Serving static files in Express](http://expressjs.com/starter/static-files.html).)
+
+As was mentioned in Step 2, middleware is executed in order with each HTTP request.  When a request arrives, typically its path should be evaluated against all the routes we have defined in our controller.  Only if no controller route applies, should we try to see if the path refers to a static file.  Therefore, it is typically preferable to put the `express.static` middleware *after* the controller routes in our app.js file.  And like Morgan, you are going to want to `app.use()` the `express.static()` middleware. 
+
+The root argument for `express.static` refers to the root directory in which you have stored your static files.  In HW9 that was in the public directory and that is a common practice. The root path that you provide to `express.static` is relative to the directory from which  you ran the node program. In case you might run the express app from another directory (perhaps when deploying to OpenShift), it is safer to use the absolute path of the directory you want to serve by prepending the global variable \_\_public  (that is underscore-underscore public), to the public directory path as in `express.static(__dirname+"/public)`.
+
+So putting it all together, it is typical to use `app.use(express.static(__dirname + '/public'));`.
+
+1. Add the static middleware to your app.js
+2. Create a directory `public` and subdirectories `css` and `js`.
+3. Add a test html file to public (and optionally css and js files to the subdirectories)
+4. Test getting the test html file from the browser.
 
