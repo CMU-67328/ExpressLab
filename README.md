@@ -99,7 +99,7 @@ Most important for your use is that the query parameters are automatically parse
 The Express API is the best source of information on Express.  The latest version is 4.x which we will use in this class, and the base URL for its API is http://expressjs.com/en/4x/api.html.
 
 1. Review the Express examples for [req.query](http://expressjs.com/en/4x/api.html#req.query).  Notice that it is very simple to refer to a query attribute (such as *q*) by its name on req.query (i.e. req.query.q).
-2. Add a new GET route to your app for a path of the form `/say?greeting=Alii&to=Edwel` that returns "Alii Edwel".
+2. Add a new GET route to your app for a path and query string of the form `/say?greeting=Alii&to=Edwel` that returns "Alii Edwel".
 3. Test your new route.  Experiment whether the query string order matters: `/say?to=Pua&greeting=Kia%20Orana` (This sounds like a simple exam question I could use.)
 
 ## Step 7 - Route parameters
