@@ -94,15 +94,15 @@ It is based on [qs](https://www.npmjs.org/package/qs) which is _**very**_ powerf
 
 Most important for your use is that the query parameters are automatically parsed from the request URL and added as an object on the request object.
 
-The Express API is the best source of information on Express.  The latest version is 4.x which we will use in this class, and the base URL for its API is http://expressjs.com/4x/api.html.
+The Express API is the best source of information on Express.  The latest version is 4.x which we will use in this class, and the base URL for its API is http://expressjs.com/en/4x/api.html.
 
-1. Review the Express examples for [req.query](http://expressjs.com/4x/api.html#req.query).  Notice that it is very simple to refer to a query attribute (such as *q*) by its name on req.query (i.e. req.query.q).
+1. Review the Express examples for [req.query](http://expressjs.com/en/4x/api.html#req.query).  Notice that it is very simple to refer to a query attribute (such as *q*) by its name on req.query (i.e. req.query.q).
 2. Add a new GET route to your app for a path of the form `/say?greeting=Alii&to=Edwel` that returns "Alii Edwel".
 3. Test your new route.  Experiment whether the query string order matters: `/say?to=Pua&greeting=Kia%20Orana` (This sounds like a simple exam question I could use.)
 
 ## Step 6 - Route parameters
 
-Express also makes it easy to parse the individual components of a URL path as parameters.  Documentation for this can be found [here](http://expressjs.com/4x/api.html#req.params).
+Express also makes it easy to parse the individual components of a URL path as parameters.  Documentation for this can be found [here](http://expressjs.com/en/4x/api.html#req.params).
 
 For example, consider the set of paths:
 * /user/FredF/firstname
