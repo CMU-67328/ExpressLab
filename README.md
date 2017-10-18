@@ -2,17 +2,17 @@
 
 ## Step 1 - Hello World
 
-1. In a terminal window, cd to a directory to work in.
+1. In a terminal window, `cd` to a directory to work in.
 2. Create the package.json file:
     - Run `npm init`
-    - Use defaults except for entry point type `app.js`
+    - Use defaults except for *entry point* type `app.js`
 3. View the package.json that is created in the current directory
-    - I.e. with sublime, cat, vim, or in another editor
+    - I.e. with atom, sublime, vim, or in another editor
 4. Run `npm install express --save`
     - This will download Express
-    - *--save* will add the dependency to package.json
+    - *--save* will add the dependency to *package.json*
     - Look at the contents of the current directory, there is now a *node_modules* directory
-    - View the package.json file and see the added Express dependency.  
+    - View the *package.json* file and see the added Express dependency.  
 5. Create and edit a new file `app.js` and insert the following code:
 
    ```JavaScript
@@ -36,16 +36,16 @@
 ## Step 2 - Add logging middleware
 It would be useful to have some logging messages to show what URLs that are visiting your site. The NPM package [Morgan](https://www.npmjs.org/package/morgan) is middleware to provide formatted logging messages to the node console.
 
-Middleware is a function that handles requests and is part of the controller function of MVC.  Middleware is used for many purposes; most basically it is used to take the request and call the right route-handling functions that will perform the rest of the controller role.  The app.get in Step 1 is serving that role.  Middleware can also be used to do authentication, authorization, manage cookies and sessions, and many more functions.  
+Middleware is a function that handles requests and is part of the controller function of MVC.  Middleware is used for many purposes; most basically it is used to take the request and call the right route-handling functions that will perform the rest of the controller role.  The `app.get` in Step 1 is serving that role.  Middleware can also be used to do authentication, authorization, manage cookies and sessions, and many more functions.  
 
-Here is a [list of middleware modules that work well with Express](http://expressjs.com/resources/middleware.html).  You can use several middleware modules, each doing its own processing of the request.  For example, you can use body-parser to process the body of post and put requests, and express-sessions to manage sessions.  This is known as *stacking* middleware.
+Here is a [list of middleware modules that work well with Express](http://expressjs.com/en/resources/middleware.html).  You can use several middleware modules, each doing its own processing of the request.  For example, you can use body-parser to process the body of post and put requests, and express-sessions to manage sessions.  This is known as *stacking* middleware.
 
-For now, we are going to add the logging module, Morgan, to our middleware stack.  The stack is processed in order, so we should put Morgan *before* the app.get that processes the request.
+For now, we are going to add the logging module, Morgan, to our middleware stack.  The stack is processed in order, so we should put Morgan before the *app.get* that processes the request.
 
-1. Run `npm install morgan --save` to install Morgan and include it in package.json
-2. View the package.json to see the added Morgan dependency
+1. Run `npm install morgan --save` to install Morgan and include it in *package.json*
+2. View the *package.json* to see the added Morgan dependency
 3. Go to [Morgan package at npmjs.org and scroll down to the Express/Connect examples](https://www.npmjs.com/package/morgan#express-connect)
-4. Using their example, integrate Morgan into your app.js 
+4. Using their example, integrate Morgan into your *app.js*
 5. Run your node app and visit it with a few different paths, including /hi.
 6. Back at the Morgan npm documentation, scroll up to the [Predefined Formats](https://www.npmjs.org/package/morgan#predefined-formats) section and review the options available for formatting the logging messages.  Experiment with a couple options.  For example, I personally like the *tiny*  format.
 
@@ -66,7 +66,7 @@ Re-run your node app and browse to the /bye and /hi paths.
 
 It can be a nuisance to have to quit and restart node each time you edit your app.js file.  Nodemon is an npm package that will monitor your files and restart node automagically whenever you save a change.
 
-Nodemon is not a module, but a program.  But it is available via npm.  To install it from the terminal prompt, run: `npm install -g nodemon`.  The -g means to install it *globally* and not in this particular directory.  You might have to run this as administrator or sudo depending on the permissions on your laptop.
+Nodemon is not a module, but a program.  But it is available via npm.  To install it from the terminal prompt, run: `npm install -g nodemon`.  The -g means to install it *globally* and not in this particular directory.  You will have to run this as administrator or sudo depending on the permissions on your laptop.
 
 Once you have it installed, instead of running your app directly with node, run it with `nodemon app`.  
 
@@ -177,23 +177,13 @@ Of course we will want to do more in our app than just return simple strings.  T
 (Putting this nascent model in the controller is bad *separation of concerns*, but we will deal with that later.)
 3. Test your app by doing a PUT to `/user/Wilma/lastname/Flintstone` then a GET to `/user/Wilma/lastname/`.  Your GET should include that Wilma's lastname is Flintstone.
 
-## Step 11 - Demonstrate to a TA 
+## Step 11 - Serving static files (html, css, js, etc.)
 
-Demonstrate your working app to a TA **only during office hours**  by the end of Friday.
-
----
-
-## Optional (but useful) additional steps
-
----
-
-## Step 12 - Serving static files (html, css, js, etc.)
-
-Web applications typically have static files that are required on the client (browser) side.  These static files include html, css, javascript, jpg, and others that are rendered, interpreted, or displayed by the client.  In HW9 you wrote code to serve these static files by explicitly reading a file from disk and writing it back across the network to the client.  Thankfully Express.js provides middleware to do this more robustly and easily:  `express.static(root, [options])` (See the [Serving static files in Express](http://expressjs.com/starter/static-files.html).)
+Web applications typically have static files that are required on the client (browser) side.  These static files include html, css, javascript, jpg, and others that are rendered, interpreted, or displayed by the client.  In HW8 you wrote code to serve these static files by explicitly reading a file from disk and writing it back across the network to the client.  Thankfully Express.js provides middleware to do this more robustly and easily:  `express.static(root, [options])` (See the [Serving static files in Express](http://expressjs.com/starter/static-files.html).)
 
 As was mentioned in Step 2, middleware is executed in order with each HTTP request.  When a request arrives, typically its path should be evaluated against all the routes we have defined in our controller.  Only if no controller route applies, should we try to see if the path refers to a static file.  Therefore, it is typically preferable to put the `express.static` middleware *after* the controller routes in our app.js file.  And like Morgan, you are going to want to `app.use()` the `express.static()` middleware. 
 
-The root argument for `express.static` refers to the root directory in which you have stored your static files.  In HW9 that was in the public directory and that is a common practice. The root path that you provide to `express.static` is relative to the directory from which  you ran the node program. In case you might run the express app from another directory (perhaps when deploying to Now), it is safer to use the absolute path of the directory you want to serve by prepending the global variable \_\_dirname  (that is underscore-underscore dirname), to the public directory path as in `express.static(__dirname+"/public)`.
+The root argument for `express.static` refers to the root directory in which you have stored your static files.  In HW8 that was in the public directory and that is a common practice. The root path that you provide to `express.static` is relative to the directory from which  you ran the node program. In case you might run the express app from another directory (perhaps when deploying to Now), it is safer to use the absolute path of the directory you want to serve by prepending the global variable \_\_dirname  (that is underscore-underscore dirname), to the public directory path as in `express.static(__dirname+"/public)`.
 
 So putting it all together, it is typical to use `app.use(express.static(__dirname + '/public'));`.
 
@@ -202,3 +192,10 @@ So putting it all together, it is typical to use `app.use(express.static(__dirna
 3. Add a test html file to public (and optionally css and js files to the subdirectories)
 4. Test getting the test html file from the browser.
 
+## Step 12 - Publish to Now
+
+Publish your app to Now, **being sure to include --public if you have a paid account** and test all routes.
+
+## Step 13 - Submit to Canvas
+
+Submit to Canvas your Now URL.
